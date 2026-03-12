@@ -7,11 +7,9 @@ const startButton = document.getElementById("start-button");
 const cakeStack = document.getElementById("cake-stack");
 
 
-const cakeSpeed = 3;
+const itemSpeed = 3;
 const spawnRate = 1000;
-let stackedCakes = 0;
 let activeItem = null;
-let candleMode = false;
 let licenses = 0;
 let gameOver = false;
 
@@ -131,13 +129,10 @@ function restartGame() {
     }
 
     // Remove any falling items
-    document.querySelectorAll(".cake, .candle").forEach(el => el.remove());
+    document.querySelectorAll(".license, .cone").forEach(el => el.remove());
 
     // Reset game state
-    score = 0;
     licenses = 0;
-    stackedCakes = 0;
-    candleMode = false;
     activeItem = null;
 
     // Clear stack container
@@ -174,7 +169,7 @@ function spawnItem() {
 
     const fallInterval = setInterval(() => {
 
-        itemY += cakeSpeed;
+        itemY += itemSpeed;
         item.style.top = itemY + "px";
 
         if (checkCollision(item)) {
@@ -199,25 +194,6 @@ function spawnItem() {
     }, 20);
 }
 
-function catchCake() {
-
-    stackedCakes++;
-
-    const stack = document.createElement("div");
-    stack.classList.add("stacked-cake", "snap-land");
-
-    cakeStack.appendChild(stack);
-
-    // Remove animation class after it plays once
-    setTimeout(() => {
-        stack.classList.remove("snap-land");
-    }, 200);
-
-    if (stackedCakes >= 3) {
-        candleMode = true;
-    }
-}
-
 function getStackTop() {
 
     const playerRect = player.getBoundingClientRect();
@@ -226,18 +202,6 @@ function getStackTop() {
     const stackHeight = stackedCakes * cakeHeight;
 
     return playerRect.top - stackHeight;
-}
-
-function placeCandle() {
-
-    clearInterval(spawnInterval);
-
-    const candle = document.createElement("div");
-    candle.classList.add("candle");
-
-    cakeStack.appendChild(candle);
-
-    showCelebration();
 }
 
 function showCelebration() {
