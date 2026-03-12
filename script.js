@@ -143,6 +143,9 @@ function restartGame() {
     document.getElementById("game-section").classList.remove("hidden");
     document.getElementById("celebration")?.remove();
 
+    playerX = 250;
+    player.style.left = playerX + "px";
+
     // Restart game loop
     initGame();
 }
