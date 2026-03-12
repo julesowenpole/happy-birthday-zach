@@ -13,6 +13,7 @@ let stackedCakes = 0;
 let activeItem = null;
 let candleMode = false;
 let licenses = 0;
+let gameOver = false;
 
 
 // Player position
@@ -48,7 +49,8 @@ let spawnInterval = null;
 function initGame() {
 
     console.log("Game started");
-
+    scoreDisplay.textContent = "Licenses: 0";
+    gameOver = false;
     document.getElementById("bg-music").play().catch(() => {});
 
     if (spawnInterval) clearInterval(spawnInterval);
@@ -72,34 +74,41 @@ function initGame() {
 
 function checkCollision(item) {
 
+    if (gameOver) return false;
+
     const itemRect = item.getBoundingClientRect();
     const playerRect = player.getBoundingClientRect();
-
-    const stackTop = getStackTop();
 
     const horizontalHit =
         itemRect.right > playerRect.left &&
         itemRect.left < playerRect.right;
 
     const verticalHit =
-        itemRect.bottom >= stackTop &&
-        itemRect.bottom <= stackTop + 10;
+        itemRect.bottom >= playerRect.top &&
+        itemRect.bottom <= playerRect.bottom;
 
     return horizontalHit && verticalHit;
 }
 
 function catchLicense() {
 
+    if (gameOver) return;
+
     licenses++;
 
     scoreDisplay.textContent = "Licenses: " + licenses;
 
     if (licenses >= 3) {
+        gameOver = true;
         showCelebration();
     }
 }
 
 function crash() {
+
+    if (gameOver) return;
+
+    gameOver = true;
 
     const message = document.createElement("div");
     message.id = "celebration";
@@ -126,6 +135,7 @@ function restartGame() {
 
     // Reset game state
     score = 0;
+    licenses = 0;
     stackedCakes = 0;
     candleMode = false;
     activeItem = null;
