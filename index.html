@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dad's Virtual Card</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="birthday-cake-icon.png">
+</head>
+
+<body>
+
+    <header>
+        <h1>Catch the Cake!</h1>
+    </header>
+
+    <!-- GAME AREA -->
+    <section id="game-section">
+    
+        <div id="score"></div>
+        
+        <div id="game-area">
+            <div id="player">
+                <div id="cake-stack"></div>
+            </div>
+        </div>
+
+        <button id="start-button">Start!</button>
+    
+    </section>
+
+
+    <!-- BIRTHDAY CARD (hidden at first) -->
+    <section id="card-section" class="hidden">
+        <div id="card">
+            <h2></h2>
+            <p class="card-message">To Zach,<br>Happy Birthday! I can't believe you're 18 already.<br>I'm so proud of you and who you've become, you're a great brother and friend.<br>And I know you'll kill your drivers test!!</p>
+            <p class="card-message">Lots of Love,<br>Jules</p>
+            <button id="play-again">Play Again!</button>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+    <audio id="bg-music" loop>
+        <source src="happy_birthday.mp3" type="audio/mpeg">
+    </audio>
+
+</body>
+</html>
