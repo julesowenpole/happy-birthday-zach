@@ -12,6 +12,7 @@ const spawnRate = 1000;
 let stackedCakes = 0;
 let activeItem = null;
 let candleMode = false;
+let licenses = 0;
 
 
 // Player position
@@ -58,10 +59,10 @@ function initGame() {
     spawnInterval = setInterval(() => {
 
         if (!candleMode) {
-            spawnCake();
+            spawnItem();
         }
         else if (activeItem === null) {
-            spawnCake();
+            spawnItem();
         }
 
     }, spawnRate);
@@ -85,6 +86,30 @@ function checkCollision(item) {
         itemRect.bottom <= stackTop + 10;
 
     return horizontalHit && verticalHit;
+}
+
+function catchLicense() {
+
+    licenses++;
+
+    scoreDisplay.textContent = "Licenses: " + licenses;
+
+    if (licenses >= 3) {
+        showCelebration();
+    }
+}
+
+function crash() {
+
+    const message = document.createElement("div");
+    message.id = "celebration";
+    message.textContent = "You crashed! Try again 🚧";
+
+    gameArea.appendChild(message);
+
+    setTimeout(() => {
+        restartGame();
+    }, 2000);
 }
 
 // Restart game
@@ -117,27 +142,20 @@ function restartGame() {
     initGame();
 }
 
-// Spawn cakes or candles
-function spawnCake() {
-
-    // Prevent multiple items at once in candle mode
-    if (candleMode && activeItem !== null) {
-        return;
-    }
+function spawnItem() {
 
     const item = document.createElement("div");
 
-    if (candleMode) {
-        item.classList.add("candle");
-    } else {
-        item.classList.add("cake");
-    }
+    const isCone = Math.random() < 0.4;
 
-    activeItem = item;
+    if (isCone) {
+        item.classList.add("cone");
+    } else {
+        item.classList.add("license");
+    }
 
     const gameWidth = gameArea.offsetWidth;
     const randomX = Math.random() * (gameWidth - 40);
-
     item.style.left = randomX + "px";
 
     gameArea.appendChild(item);
@@ -151,26 +169,21 @@ function spawnCake() {
 
         if (checkCollision(item)) {
 
-            if (item.classList.contains("cake")) {
-                catchCake();
+            if (item.classList.contains("license")) {
+                catchLicense();
             }
 
-            if (item.classList.contains("candle")) {
-                placeCandle();
+            if (item.classList.contains("cone")) {
+                crash();
             }
 
             item.remove();
             clearInterval(fallInterval);
-
-            activeItem = null;
-            return;
         }
 
         if (itemY > gameArea.offsetHeight) {
             item.remove();
             clearInterval(fallInterval);
-
-            activeItem = null;
         }
 
     }, 20);
